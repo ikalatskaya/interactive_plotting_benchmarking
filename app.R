@@ -325,12 +325,11 @@ server <- function(input, output, session) {
     
   })
   
-  
-  
-  
+
   output$ggplotly_code <- renderText({
     if(input$type == "scatter") {
-      string = 'ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species)) + geom_point(size=3) + labs(x = "length", y = "width", title="iris database"))'
+      #string = 'ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species)) + geom_point(size=3) + labs(x = "length", y = "width", title="iris database"))'
+      string = paste0('pokemon %>% ggplot(., aes(', input$varX, ', ', input$varY, ', color=', input$varZ, ')) + geom_point(size=', input$dotsize, ') + labs(x = ', input$varX, ', y = ', input$varY, ', title="ggplotly: scatter plot example")')
     }
     else if(input$type == "density") {
       string = 'ggplot(iris, aes(Sepal.Length, colour = Species, fill=Species)) + geom_density(alpha=0.8) + labs(x = "Length"))'
