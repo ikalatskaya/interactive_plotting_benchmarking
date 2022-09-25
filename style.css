@@ -1,0 +1,27 @@
+.sidebar {
+    color: #FFF;
+    position: fixed;
+    width: 220px;
+    white-space: nowrap;
+    overflow: visible;
+}
+
+.box {
+   width: 12; 
+   collapsible: TRUE;
+   display: yes;
+}
+
+
+.footer {
+  position: fixed;
+  overflow: visible;
+}
+
+.h5 {
+  style: bold;
+}
+
+.box-body box  {
+ display:inline;
+}
