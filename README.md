@@ -31,6 +31,7 @@ Plotly provides online graphing, analytics, and statistics tools for individuals
 <b> HIGHCHARTER </b>
 
 <b> BOKEH </b>
+A native R plotting library that provides a flexible declarative interface for creating interactive web-based graphics, backed by the Bokeh visualization library. The Bokeh library is written and maintained by the Bokeh Core Team consisting of several members of Continuum Analytics and other members of the open source community. 
 
 <b> ECHART4R </b>
 
