@@ -1,5 +1,5 @@
 .sidebar {
-    color: #FFF;
+    color: #FFFF;
     position: fixed;
     width: 220px;
     white-space: nowrap;
@@ -18,10 +18,23 @@
   overflow: visible;
 }
 
+
+.h3 {
+  style: bold;
+  padding: 0.2 em;
+  background-colr: #94B8E9;
+  border: 1px solid black;
+}
+
+
 .h5 {
   style: bold;
 }
 
-.box-body box  {
- display:inline;
+
+#code_box {
+    border: 3px solid grey;
+}
+#unit {
+    border: 4px double green;
 }

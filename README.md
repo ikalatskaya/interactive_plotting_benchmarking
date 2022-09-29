@@ -57,6 +57,7 @@ http://gallery.htmlwidgets.org/
 Full manual for highcharter
 https://cran.r-project.org/web/packages/highcharter/highcharter.pdf
 https://www.datacamp.com/community/tutorials/data-visualization-highcharter-r
+https://www.datacamp.com/tutorial/data-visualization-highcharter-r
 
 Manual for plotly
 https://plotly.com/r/
