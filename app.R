@@ -35,7 +35,7 @@ ui <- dashboardPage(
   
   dashboardHeader(
     disable = TRUE, # remove completely
-    controlbarIcon = shiny::icon("rectangle-list", verify_fa = FALSE),
+    # controlbarIcon = shiny::icon("rectangle-list", verify_fa = FALSE),
     fixed = TRUE
   ),
   
@@ -43,7 +43,7 @@ ui <- dashboardPage(
   
   ## Footer ----
   footer = dashboardFooter(
-        h3("Done by Irina Kalatskaya")
+        h5("Done by Irina Kalatskaya")
   ),
   
   sidebar <- dashboardSidebar(
@@ -123,10 +123,10 @@ ui <- dashboardPage(
     br(),
     fluidRow(
       
-      infoBox("Long lasting RShiny apps", value = NULL, subtitle = " should be interactive and self-explicit. R packages that support html widgets might help achive this goal pretty easily.", icon = shiny::icon("bar-chart", verify_fa = FALSE), 
+      infoBox("Long lasting RShiny apps", value = NULL, subtitle = " should be interactive and self-explicit. R packages that support html widgets might help achive this goal pretty easily.", icon = shiny::icon("diagram-project", lib = "font-awesome"), 
               color = "navy", width = 6, href = NULL, fill = TRUE),
       infoBox("Visualizations grant users ", value = NULL, subtitle = " the ability to explore, manipulate, and interact with data by employing dynamic charts, changing colors, and shapes. ",
-              icon = shiny::icon("user-circle", verify_fa = FALSE), color = "green", width = 6, href = NULL, fill = TRUE)
+              icon = shiny::icon("circle-user", verify_fa = FALSE), color = "green", width = 6, href = NULL, fill = TRUE)
       
     ),
     
@@ -134,7 +134,7 @@ ui <- dashboardPage(
       infoBox("HTML widgets ", subtitle = "can be used at the R console as well as embedded in R Markdown reports and Shiny web applications.",
               icon = shiny::icon("file-image", verify_fa = FALSE), color = "green", width = 6, href = NULL, fill = TRUE),
       infoBox("HTML widgets ", value = NULL, subtitle = " work just like R plots except they produce interactive web visualizations. ",
-              icon = shiny::icon("area-chart", verify_fa = FALSE), color = "navy", width = 6, href = NULL, fill = TRUE)
+              icon = shiny::icon("chart-area", verify_fa = FALSE), color = "navy", width = 6, href = NULL, fill = TRUE)
     ),
     
     ###################################
@@ -221,7 +221,7 @@ ui <- dashboardPage(
                    closable = TRUE, width = 9, collapsible = TRUE, class="box",
                    status = status, solidHeader = TRUE, class="box", height = 400),
                
-               box(style='width:3; overflow-x:scroll;height:400px;overflow-y: scroll;',
+               box(style='width:3; height:400px;overflow-y: scroll;',
 
                  closable = TRUE, width = 3, solidHeader = TRUE, height = 420,
                    title = "Info box", status = status,
