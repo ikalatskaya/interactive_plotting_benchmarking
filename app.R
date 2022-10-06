@@ -32,7 +32,6 @@ sysConfig <- getConfig()
 # clean pokemon dataset for easier visualization
 pokemon = pokemon %>% na.omit() %>% dplyr::filter(!type_1 %in% c("steel", "psychic", "ghost", "fighting", "fairy", "normal", "bug", "ice", "electric"))
 
-
 num.var = select_if(pokemon, is.numeric) %>% colnames()
 char.var = select_if(pokemon, is.character) %>% colnames()
 remove = c("pokemon", "image_url" , "icon_url" , "detail_url" )
@@ -46,11 +45,8 @@ ui <- dashboardPage(
   
   dashboardHeader(
     disable = TRUE, # remove completely
-    # controlbarIcon = shiny::icon("rectangle-list", verify_fa = FALSE),
     fixed = TRUE
   ),
-  
-  
   
   ## Footer ----
   footer = dashboardFooter(
@@ -164,12 +160,17 @@ ui <- dashboardPage(
               br(),
               box(title = sysConfig$package$PLOTLY$name,
                   plotlyOutput("plotly") %>% withSpinner(type  = 1, color = spinner.colour),
-                  status = status, solidHeader = TRUE,
-                  collapsible = TRUE, class="box", closable = TRUE, width = 9, 
-                  br(), height = 400
+                  status = status, 
+                  solidHeader = TRUE,
+                  collapsible = TRUE, 
+                  class="box", closable = TRUE, 
+                  width = 9, 
+                  height = 400,
+                  icon = icon(sysConfig$package$PLOTLY$icon)
               ),
               
-              box(closable = TRUE, width = 3, solidHeader = TRUE, height = 400,
+              box(closable = TRUE, width = 3, 
+                  solidHeader = TRUE, height = 400,
                   title = "Info box", status = status,
                   collapsible = TRUE,
                   class="box",
@@ -179,10 +180,14 @@ ui <- dashboardPage(
                   h4("Cons"),
                   p(sysConfig$package$PLOTLY$cons),
                   h4("Library"),
-                  p("library(plotly)")
+                  p(sysConfig$package$PLOTLY$lib),
+                  icon = icon(sysConfig$title$infoicon)
               ),
               box(
-                verbatimTextOutput("plotly_code"), width = 12, closable = TRUE, id = "code_box", title = "Code"),
+                verbatimTextOutput("plotly_code", placeholder = TRUE), 
+                width = 12, closable = TRUE, 
+                id = "code_box", 
+                title = sysConfig$title$codebox),
               br()
     ),
     
@@ -196,33 +201,40 @@ ui <- dashboardPage(
               box(
                 title = sysConfig$package$GGPLOTLY$name,
                 plotlyOutput(("myggplotly")) %>% withSpinner(type  = 1, color = spinner.colour),
-                closable = TRUE,  width = 9, 
-                title = "", status = status, 
+                width = 9, 
+                status = status, 
                 solidHeader = TRUE, 
+                closable = TRUE,
                 collapsible = TRUE, 
-                class="box"
+                class="box",
+                icon = icon(sysConfig$package$GGPLOTLY$icon)
               ),
               
-              box(closable = TRUE, width = 3, solidHeader = TRUE, height = 400,
-                  title = "Info box", status = status,
-                  collapsible = TRUE,
-                  class="box",
-                  p("Extension of the ggplo2 package."),
-                  h4("Pros"),
-                  p("(1) Free; 
-                    (2) Worked with ggplot objects; 
-                    (3) Tooltips for x, y, and colour are automatically added; (4) Interactive legends; (5) Many different themes are available:"),
-                  shinyWidgets::pickerInput(inputId = "ggplot_theme", 
+              box(closable = TRUE, 
+                width = 3, 
+                solidHeader = TRUE, 
+                title = "Info box", 
+                status = status,
+                collapsible = TRUE,
+                class="box",
+                p(sysConfig$package$GGPLOTLY$description),
+                h4("Pros"),
+                p(sysConfig$package$GGPLOTLY$pros),
+                shinyWidgets::pickerInput(inputId = "ggplot_theme", 
                                             label = h4("Select ggplot theme"), 
                                             choices = c("theme_grey", "theme_bw", "theme_classic", "theme_dark", "theme_minimal", "theme_void", "theme_version"), 
                                             selected="theme_bw"),
-                  h4("Cons"),
-                  p("(1) This package doesn't always generate a nice professional look; (2) Plot subsetting using legends doesn't lead to the rescaling of x- and y-axes."),
-                  h4("Library"),
-                  p("library(ggplot2)")
+                h4("Cons"),
+                p(sysConfig$package$GGPLOTLY$cons),
+                h4("Library"),
+                p(sysConfig$package$GGPLOTLY$lib),
+                icon = icon(sysConfig$title$infoicon)
               ),
               box(
-                verbatimTextOutput("ggplotly_code", placeholder = TRUE), width = 12, closable = TRUE, id = "code_box", title = "Code"
+                verbatimTextOutput("ggplotly_code", placeholder = TRUE), 
+                width = 12, closable = TRUE, 
+                id = "code_box", 
+                title = sysConfig$title$codebox
               )
     ),
     br(),
@@ -230,40 +242,52 @@ ui <- dashboardPage(
     ###################################
     ## HIGHCHART
     ###################################
-    fluidPage( id = "unit", 
-               br(),
-               box(highchartOutput("highchart") %>% withSpinner(type  = 1, color = spinner.colour),  
-                   title = "Highchart R package", 
-                   closable = TRUE, width = 9, collapsible = TRUE, class="box",
-                   status = status, solidHeader = TRUE, class="box", height = 400),
+    fluidPage( id = "unit", height = 400,
                
-               box(style='width:3; height:400px;overflow-y: scroll;',
-
-                 closable = TRUE, width = 3, solidHeader = TRUE, height = 420,
-                   title = "Info box", status = status,
+               br(),
+               box(title = sysConfig$package$HIGHCHARTER$name, 
+                   width = 9, 
+                   status = status,
+                   highchartOutput("highchart") %>% withSpinner(type  = 1, color = spinner.colour),  
+                   closable = TRUE, 
                    collapsible = TRUE,
-                   class="box",
-                   p("Highcharts (http://www.highcharts.com/) is a charting library written in pure JavaScript, 
-          offering an easy way of adding interactive charts to your web site or web application with a simple configuration syntax. 
-          Highcharts currently supports line, spline, area, areaspline, column, bar, pie, scatter, angular gauges, 
-          arearange, areasplinerange, columnrange, bubble, box plot, error bars, funnel, waterfall and polar chart types. 
-          Highcharter R package is a wrapper for the ‘Highcharts’ library including shortcut functions to plot R objects. 
-          It was created by Highsoft in Norway (2009)."),
-                   h4("Pros"),
-                   p("(1) Very professionally looking plots; (2) The legends are filling available space in the most efficient way, (3) The legends are interactive; (4) Different themes are available:"),
-                   
-                   shinyWidgets::pickerInput(inputId = "highchart_theme", 
+                   solidHeader = TRUE, 
+                   class="box", 
+                   icon = icon(sysConfig$package$HIGHCHARTER$icon)
+                   ),
+               
+              box(style='width:3; height:400px;overflow-y: scroll;',
+
+                  closable = TRUE, 
+                  collapsible = TRUE,
+                  solidHeader = TRUE,  
+                  width = 3,
+                  title = "Info box", 
+                  status = status,
+                  class="box",
+                  p(sysConfig$package$HIGHCHARTER$description),
+                  h4("Pros"),
+                  p(sysConfig$package$HIGHCHARTER$pros),
+      
+                  shinyWidgets::pickerInput(inputId = "highchart_theme", 
                                              label = h4("Select highchart theme"), 
-                                             choices = c("hc_theme_chalk()", "hc_theme_economist()", "hc_theme_elementary()", "hc_theme_538()", "hc_theme_flat()", "hc_theme_ffx()", "hc_theme_google()"), 
+                                             choices = c("hc_theme_chalk()", "hc_theme_economist()", 
+                                                         "hc_theme_elementary()", "hc_theme_538()", 
+                                                         "hc_theme_flat()", "hc_theme_ffx()", 
+                                                         "hc_theme_google()"), 
                                              selected="hc_theme_google()"),
                    
-                   h4("Cons"),
-                   p(" (1) Highcharts is a Highsoft product which is not free for commercial and Governmental use; (2) Tooltips could be added using JS."),
-                   h4("Library"),
-                   p("library(highcharter)")
+                  h4("Cons"),
+                  p(sysConfig$package$HIGHCHARTER$cons),
+                  h4("Library"),
+                  p(sysConfig$package$HIGHCHARTER$lib),
+                  icon = icon(sysConfig$title$infoicon)
                ),
                box(
-                 verbatimTextOutput("highcharter_code", placeholder = TRUE), width = 12, closable = TRUE, id = "code_box", title = "Code"),
+                 verbatimTextOutput("highcharter_code", placeholder = TRUE), 
+                 width = 12, closable = TRUE, 
+                 id = "code_box", 
+                 title = sysConfig$title$codebox),
                br()
     ),
     br(),
@@ -274,28 +298,41 @@ ui <- dashboardPage(
     ## RBOKEH
     ####################################
     fluidPage(width = 12, height = 400,  id = "unit",
-              
+  
               br(),
-              box(rbokehOutput("rbokeh") %>% withSpinner(type  = 1, color = spinner.colour), 
-                  width = 9, title = "Bokeh R package", status = status, 
-                  solidHeader = TRUE, collapsible = TRUE, class="box"),
-              
-              box(closable = TRUE, width = 3, solidHeader = TRUE, height = 400,
-                  title = "Info box", status = status,
+              box(title = sysConfig$package$BOKEH$name, 
+                rbokehOutput("rbokeh") %>% withSpinner(type  = 1, color = spinner.colour), 
+                  width = 9, 
+                  status = status, 
+                  closable = TRUE, 
                   collapsible = TRUE,
+                  solidHeader = TRUE, 
                   class="box",
-                  p("A native R plotting library that provides a flexible declarative interface for creating interactive web-based graphics, 
-            backed by the Bokeh visualization library. The Bokeh library is written and maintained by the Bokeh Core Team consisting of several members of Continuum Analytics and other members of the open source community. "),
+                  icon = icon(sysConfig$package$BOKEH$icon)),
+              
+              box(width = 3, 
+                  closable = TRUE, 
+                  collapsible = TRUE,
+                  solidHeader = TRUE,  
+                  title = "Info box", 
+                  status = status,
+                  class="box",
+                  p(sysConfig$package$BOKEH$description),
                   h4("Pros"),
-                  p("(1) Easy to plot; (2) Easy to add tooltips; (3) Free; (4) Overall nice professional look. "),
+                  p(sysConfig$package$BOKEH$pros),
                   h4("Cons"),
-                  p("(1) The legend is covering the plot and not movable (solution was posted only for python lib; (2) Legends are not interactive. "),
+                  p(sysConfig$package$BOKEH$cons),
                   h4("Library"),
-                  p("library(rbokeh)")
+                  p(sysConfig$package$BOKEH$lib),
+                  icon = icon(sysConfig$title$infoicon)
               ),
+              
               box(
-                verbatimTextOutput("brokeh_code", placeholder = TRUE), width = 12, closable = TRUE, id = "code_box", title = "Code"
-              )
+                verbatimTextOutput("brokeh_code", placeholder = TRUE), 
+                width = 12, 
+                closable = TRUE, 
+                id = "code_box", 
+                title = sysConfig$title$codebox)
     ),
     
     br(),
@@ -304,21 +341,28 @@ ui <- dashboardPage(
     ## ECHART
     ####################################
     
-    
     fluidPage(width = 12, height = 400,  id = "unit",
               br(),
-              box(echarts4rOutput("echart") %>% withSpinner(type  = 1, color = spinner.colour), 
-                  width = 9, title = "Echart R package", status = status, 
-                  solidHeader = TRUE, collapsible = TRUE, class="box"),
-              
-              box(closable = TRUE, width = 3, solidHeader = TRUE, height = 400,
-                  title = "Info box", status = status,
+              box( title = sysConfig$package$ECHART$name, 
+                  echarts4rOutput("echart") %>% withSpinner(type = 1, color = spinner.colour), 
+                  width = 9, 
+                  status = status, 
+                  closable = TRUE, 
                   collapsible = TRUE,
+                  solidHeader = TRUE,
                   class="box",
-                  p("Easily create interactive charts by leveraging the 'Echarts Javascript' library which includes 36 chart types, themes, 'Shiny' proxies and animations."),
+                  icon = icon(sysConfig$package$ECHART$icon)),
+              
+              box(width = 3, 
+                  title = "Info box", 
+                  status = status,
+                  closable = TRUE, 
+                  collapsible = TRUE,
+                  solidHeader = TRUE,
+                  class="box",
+                  p(sysConfig$package$ECHART$description),
                   h4("Pros"),
-                  p("(1) Professional look; (2) Good collection of default colours; (3) Easy to add tooltips; (4) Interactive legends; (5) Rich collection of themes."),
-                  
+                  p(sysConfig$package$ECHART$pros),
                   # https://echarts4r.john-coene.com/articles/themes.html
                   shinyWidgets::pickerInput(inputId = "ehcart_theme", 
                                             label = h4("Select echart theme"), 
@@ -332,19 +376,22 @@ ui <- dashboardPage(
                                             selected=NULL),
                   
                   h4("Cons"),
-                  p("(1) Relatively hard to build; (2) Stacked barcharts are tricky. "),
+                  p(sysConfig$package$ECHART$cons),
                   h4("Library"),
-                  p("library(echarts4r)")
+                  p(sysConfig$package$ECHART$lib),
+                  icon = icon(sysConfig$title$infoicon)
               ),
               box(
-                verbatimTextOutput("echart_code", placeholder = TRUE), width = 12, closable = TRUE, id = "code_box", title = "Code"
+                verbatimTextOutput("echart_code", placeholder = TRUE), 
+                width = 12, closable = TRUE, 
+                id = "code_box", 
+                title = sysConfig$title$codebox
               )
               
     ),
     
     
     fluidPage(
-      # theme  = bslib::bs_theme(bootswatch = "darkly"),
       br(),
       br(),
       column(12, solidHeader = TRUE, status = "success", 

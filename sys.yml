@@ -2,40 +2,55 @@
 # renv::init(bioconductor="3.14") renv 15.4 required
 # each of following sections indicates a dataset, all information are required for the APP to support the any dataset
 # icon has to be free v5 @https://fontawesome.com/v5/search?m=free
+title:
+  codebox: Code
+  infoicon: circle-info
+
 package:
   PLOTLY:
     name: Plotly R package
-    icon: info-circle
+    icon: image
     description: Plotly is a technical computing company headquartered in Montreal, Quebec. 
                   It develops online data analytics and visualization tools. 
                   Plotly provides online graphing, analytics, and statistics tools for individuals and collaboration, 
                   as well as scientific graphing libraries for Python, R, MATLAB, Perl, Julia, Arduino, and REST.
     pros: (1) Free, (2) Easy to use; (3) Professional look
     cons: (1) Tooltips have to be handled manually with JavaScript
-    intro:
-      sec1:
-        title: Application Introduction
-        icon: info-circle
-        info: information only
-        html: "Current page! Introduce the functionality of the MS hub!"
-    admin: [x245203]
+    lib: library(plotly)
   GGPLOTLY:
     name: Ggplot2 R package
-    icon: info
-    description: 
-    pros: (1) This package doesn't always generate a nice professional look; (2) Plot subsetting using legends doesn't lead to the rescaling of x- and y-axes.
-    cons:
-    datakey: description
-    intro:
-      sec1:
-        title: Datasets Description
-        icon: info
-        info: information only
-        html: "This tab contains information about the datasets used in this application: A description of the trial and a summary table of the samples."
+    icon: info-circle
+    description: Extension of the ggplo2 package.
+    pros: (1) Free; (2) Works with ggplot objects; (3) Tooltips for x, y, and colour are automatically added; (4) Interactive legends; (5) Many different themes are available
+    cons: (1) This package doesnt always generate a nice professional look; (2) Plot subsetting using legends doesn't lead to the rescaling of x- and y-axes.
+    lib: library(ggplot2)
   BOKEH:
-    name: bokeh
-    icon: info-circle
+    name: rbokeh R package
+    icon: user-group
+    description: A native R plotting library that provides a flexible declarative interface for creating interactive web-based graphics, 
+            backed by the Bokeh visualization library. The Bokeh library is written and maintained by the Bokeh Core Team consisting of several members of Continuum Analytics and other members of the open source community. 
+    pros: (1) Free; (2) Easy to add tooltips; (3) Easy to plot; (4) Overall nice professional look.
+    cons: (1) The legend is covering the plot and not movable (solution was posted only for python lib; (2) Legends are not interactive. 
+    lib: library(rbokeh)
   HIGHCHARTER:
-    name: highcharter
-    icon: info-circle
-  
+    name: highcharter R package
+    icon: lock
+    description: Highcharts (http://www.highcharts.com/) is a charting library written in pure JavaScript, 
+          offering an easy way of adding interactive charts to your web site or web application with a simple configuration syntax. 
+          Highcharts currently supports line, spline, area, areaspline, column, bar, pie, scatter, angular gauges, 
+          arearange, areasplinerange, columnrange, bubble, box plot, error bars, funnel, waterfall and polar chart types. 
+          Highcharter R package is a wrapper for the ‘Highcharts’ library including shortcut functions to plot R objects. 
+          It was created by Highsoft in Norway (2009).
+    pros: (1) Very professionally looking plots; (2) The legends are filling available space in the most efficient way, (3) Interactive legends; (4) Rich collection of cool themes.
+    cons: (1) Highcharts is a Highsoft product which is not free for commercial and Governmental use; (2) Tooltips could be added using JS.
+    lib: library(highcharter)
+  ECHART:
+    name: echart4r R package
+    icon: user-group
+    description: Easily create interactive charts by leveraging the 'Echarts Javascript' library which includes 36 chart types, themes, 'Shiny' proxies and animations.
+    pros: (1) Free; (2) Professional look; (3) Good collection of default colours; (4) Easy to add tooltips; (5) Interactive legends; (6) Rich collection of themes.
+    cons: (1) Relatively hard to build; (2) Stacked barcharts are tricky.
+    lib: library(echarts4r)
+    icon2: info-circle
+    
+    
