@@ -2,12 +2,16 @@
 # renv::init(bioconductor="3.14") renv 15.4 required
 # each of following sections indicates a dataset, all information are required for the APP to support the any dataset
 # icon has to be free v5 @https://fontawesome.com/v5/search?m=free
-
-
-layout:
-  intro:
-    name: Description
+package:
+  PLOTLY:
+    name: Plotly R package
     icon: info-circle
+    description: Plotly is a technical computing company headquartered in Montreal, Quebec. 
+                  It develops online data analytics and visualization tools. 
+                  Plotly provides online graphing, analytics, and statistics tools for individuals and collaboration, 
+                  as well as scientific graphing libraries for Python, R, MATLAB, Perl, Julia, Arduino, and REST.
+    pros: (1) Free, (2) Easy to use; (3) Professional look
+    cons: (1) Tooltips have to be handled manually with JavaScript
     intro:
       sec1:
         title: Application Introduction
@@ -15,9 +19,12 @@ layout:
         info: information only
         html: "Current page! Introduce the functionality of the MS hub!"
     admin: [x245203]
-  desc:
-    name: Datasets
+  GGPLOTLY:
+    name: Ggplot2 R package
     icon: info
+    description: 
+    pros: (1) This package doesn't always generate a nice professional look; (2) Plot subsetting using legends doesn't lead to the rescaling of x- and y-axes.
+    cons:
     datakey: description
     intro:
       sec1:
@@ -25,3 +32,10 @@ layout:
         icon: info
         info: information only
         html: "This tab contains information about the datasets used in this application: A description of the trial and a summary table of the samples."
+  BOKEH:
+    name: bokeh
+    icon: info-circle
+  HIGHCHARTER:
+    name: highcharter
+    icon: info-circle
+  
