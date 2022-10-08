@@ -9,7 +9,7 @@ title:
 package:
   PLOTLY:
     name: Plotly R package
-    icon: image
+    icon: bolt
     description: Plotly is a technical computing company headquartered in Montreal, Quebec. 
                   It develops online data analytics and visualization tools. 
                   Plotly provides online graphing, analytics, and statistics tools for individuals and collaboration, 
@@ -52,5 +52,3 @@ package:
     cons: (1) Relatively hard to build; (2) Stacked barcharts are tricky.
     lib: library(echarts4r)
     icon2: info-circle
-    
-    

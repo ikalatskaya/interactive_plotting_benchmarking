@@ -63,6 +63,10 @@ https://www.datacamp.com/tutorial/data-visualization-highcharter-r
 Manual for plotly
 https://plotly.com/r/
 
+Good intro to echart4r
+https://www.infoworld.com/article/3607068/plot-in-r-with-echarts4r.html
+
+
 <br/>
 <br/>
 
