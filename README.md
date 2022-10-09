@@ -4,9 +4,15 @@
 
 Visualizations grant users the ability to explore, manipulate, and interact with data by employing dynamic charts, changing colors, and shapes based on queries or interactions. 
 
+What is interactive visuazation?
+
+Interactive visualizations are produced using data visualization tools which allow for direct modification of elements on a graphical plot.
+
 HTML widgets work just like R plots except they produce interactive web visualizations. HTML widgets can be used at the R console as well as embedded in R Markdown reports and Shiny web applications. 
 
 ## Objectives
+
+This dashboard presents and compares five most popular html widget tools for building interactive plots in Rshiny. 
 
 Interactivity: long lasting RShiny apps should be interactive and self-explicit. R packages that support html widgets might help achive this goal pretty easily: plot_ly, ggplotly, highcharter, bokeh or echart? 
 
@@ -55,16 +61,21 @@ https://www.htmlwidgets.org/showcase_plotly.html
 Gallary of widgets
 http://gallery.htmlwidgets.org/
 
-Full manual for highcharter
+#### Full manual for highcharter
 https://cran.r-project.org/web/packages/highcharter/highcharter.pdf
 https://www.datacamp.com/community/tutorials/data-visualization-highcharter-r
 https://www.datacamp.com/tutorial/data-visualization-highcharter-r
 
-Manual for plotly
+#### Manual for plotly
 https://plotly.com/r/
 
-Good intro to echart4r
+#### Good intro to echart4r
 https://www.infoworld.com/article/3607068/plot-in-r-with-echarts4r.html
+https://echarts4r.john-coene.com/articles/chart_types.html
+
+
+#### Rbokeh 
+https://hafen.github.io/rbokeh/articles/rbokeh.html
 
 
 <br/>

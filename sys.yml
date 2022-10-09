@@ -52,3 +52,4 @@ package:
     cons: (1) Relatively hard to build; (2) Stacked barcharts are tricky.
     lib: library(echarts4r)
     icon2: info-circle
+---
