@@ -19,18 +19,19 @@ package:
     lib: library(plotly)
   GGPLOTLY:
     name: Ggplot2 R package
-    icon: info-circle
+    icon: user-group
     description: Extension of the ggplo2 package.
     pros: (1) Free; (2) Works with ggplot objects; (3) Tooltips for x, y, and colour are automatically added; (4) Interactive legends; (5) Many different themes are available
     cons: (1) This package doesnt always generate a nice professional look; (2) Plot subsetting using legends doesn't lead to the rescaling of x- and y-axes.
     lib: library(ggplot2)
+    theme: ["theme_grey", "theme_bw", "theme_classic", "theme_dark", "theme_minimal", "theme_void", "theme_version"]
   BOKEH:
     name: rbokeh R package
     icon: user-group
     description: A native R plotting library that provides a flexible declarative interface for creating interactive web-based graphics, 
             backed by the Bokeh visualization library. The Bokeh library is written and maintained by the Bokeh Core Team consisting of several members of Continuum Analytics and other members of the open source community. 
     pros: (1) Free; (2) Easy to add tooltips; (3) Easy to plot; (4) Overall nice professional look.
-    cons: (1) The legend is covering the plot and not movable (solution was posted only for python lib; (2) Legends are not interactive. 
+    cons: (1) The legend covers a part of the plot and not movable (solution was posted only for python lib; (2) Legends are not interactive (which makes the plot almost static). 
     lib: library(rbokeh)
   HIGHCHARTER:
     name: highcharter R package
@@ -49,7 +50,8 @@ package:
     icon: user-group
     description: Easily create interactive charts by leveraging the 'Echarts Javascript' library which includes 36 chart types, themes, 'Shiny' proxies and animations.
     pros: (1) Free; (2) Professional look; (3) Good collection of default colours; (4) Easy to add tooltips; (5) Interactive legends; (6) Rich collection of themes.
-    cons: (1) Relatively hard to build; (2) Stacked barcharts are tricky.
+    cons: (1) Relatively hard to build; (2) THe stacked barcharts are tricky.
     lib: library(echarts4r)
     icon2: info-circle
----
+
+
