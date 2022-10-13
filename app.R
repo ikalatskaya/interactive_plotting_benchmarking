@@ -137,7 +137,7 @@ ui <- function(request) {
               br(),
               
               plotBox(title = sysConfig$package$PLOTLY$name, 
-                      output = plotlyOutput("plotly"), 
+                      output = fullscreen_this(plotlyOutput("plotly")), 
                       icon = icon(sysConfig$package$PLOTLY$icon)
                       ),
               
@@ -165,7 +165,7 @@ ui <- function(request) {
               br(),
              
               plotBox(title = sysConfig$package$GGPLOTLY$name, 
-                      output = plotlyOutput("myggplotly"), 
+                      output = fullscreen_this(plotlyOutput("myggplotly")), 
                       icon = icon(sysConfig$package$GGPLOTLY$icon)),
               
               
@@ -177,28 +177,6 @@ ui <- function(request) {
                       lib = sysConfig$package$GGPLOTLY$lib,
                       icon = icon(sysConfig$title$infoicon)
               ),
-              
- #             box(style='width:3; height:400px;overflow-y: scroll;',
-#                closable = TRUE, 
-#                width = 3, 
-#                solidHeader = TRUE, 
-#                title = "Info box", 
-#                status = status,
-#                collapsible = TRUE,
-#                class="box",
-#                p(sysConfig$package$GGPLOTLY$description),
-#                h4("Pros"),
-#                p(sysConfig$package$GGPLOTLY$pros),
-#                shinyWidgets::pickerInput(inputId = "ggplot_theme", 
-#                                            label = h4("Select ggplot theme"), 
- #                                           choices = c("theme_grey", "theme_bw", "theme_classic", "theme_dark", "theme_minimal", "theme_void", "theme_version"), 
-#                                            selected="theme_bw"),
-#                h4("Cons"),
-#                p(sysConfig$package$GGPLOTLY$cons),
-#                h4("Library"),
-#                p(sysConfig$package$GGPLOTLY$lib),
-#                icon = icon(sysConfig$title$infoicon)
-#              ),
               
               codeBox(title = sysConfig$title$codebox, 
                       output = verbatimTextOutput("ggplotly_code", placeholder = TRUE)),
@@ -214,7 +192,7 @@ ui <- function(request) {
                br(),
                
                plotBox(title = sysConfig$package$HIGHCHARTER$name, 
-                       output = highchartOutput("highchart"), 
+                       output = fullscreen_this(highchartOutput("highchart")), 
                        icon = icon(sysConfig$package$HIGHCHARTER$icon)),
                
               box(style='width:3; height:400px;overflow-y: scroll;',
@@ -264,7 +242,7 @@ ui <- function(request) {
   
               br(),
               plotBox(title = sysConfig$package$BOKEH$name, 
-                      output = rbokehOutput("rbokeh"), 
+                      output = fullscreen_this(rbokehOutput("rbokeh")), 
                       icon = icon(sysConfig$package$BOKEH$icon)),
               
               descBox(desc = sysConfig$package$BOKEH$description,
@@ -274,23 +252,6 @@ ui <- function(request) {
                                   icon = icon(sysConfig$title$infoicon)
               ),
               
-   #           box(width = 3, 
-  #                closable = TRUE, 
-   #               collapsible = TRUE,
-  #                solidHeader = TRUE,  
-  #                title = "Info box", 
-  #                status = status,
-  #                class="box",
-  #                p(sysConfig$package$BOKEH$description),
-  #                h4("Pros"),
-  #                p(sysConfig$package$BOKEH$pros),
-  #                h4("Cons"),
-  #                p(sysConfig$package$BOKEH$cons),
-  #                h4("Library"),
-  #                p(sysConfig$package$BOKEH$lib),
-  #                icon = icon(sysConfig$title$infoicon)
-   #           ),
-              
               codeBox(title = sysConfig$title$codebox, 
                       output = verbatimTextOutput("brokeh_code", placeholder = TRUE)),
               br()
@@ -298,15 +259,15 @@ ui <- function(request) {
     
     br(),
     
-    ####################################
+    ####################################################
     ## ECHART
-    ####################################
+    ####################################################
     
     fluidPage(width = 12, height = 400,  id = "unit",
             
               br(),
               plotBox(title = sysConfig$package$ECHART$name, 
-                      output = echarts4rOutput("echart"), 
+                      output = fullscreen_this(echarts4rOutput("echart")), 
                       icon = icon(sysConfig$package$ECHART$icon)),
               
               
@@ -536,11 +497,14 @@ server <- function(input, output, session) {
     else if(input$type == "barchart") {
       string = paste0("pokemon %>% dplyr::count(", input$varZ, ", ", input$varA, ") %>% plot_ly() %>% add_trace(type='bar', x =~n, y=~", input$varZ, ", color=~", input$varA, ", text = ~paste(", input$varZ, ", ", input$varA, ", 'Number ', n), hoverinfo=c('text')) %>% layout(barmode = 'stack', margin=list(l=240)) %>% layout(title = 'Barchart by <i>plot_ly</i>', yaxis = list(title = ", input$varZ, "))")
     }
+    
     #    else if(input$type == "density") {
     #      #data = pokemon %>% dplyr::select(xx, yy, zz, pokemon) %>% reshape2::melt(., value.name = "score", id.var = "pokemon")
     #      string = plot_ly(pokemon, x = ~xx,  type = 'violin', side = "positive") %>% layout(barmode="overlay") %>% layout(title = "type = 'violin'", xaxis = list(title = input$varX))
     #    }
-    
+    #plot_ly(x = x, type = "histogram", name = "Histogram") %>% 
+    #  add_trace(x = fit$x, y = fit$y, mode = "lines", fill = "tozeroy", yaxis = "y2", name = "Density") %>% 
+     # layout(yaxis2 = list(overlaying = "y", side = "right"))
     
     
     if(input$isLegend) {

@@ -65,6 +65,7 @@ http://gallery.htmlwidgets.org/
 https://cran.r-project.org/web/packages/highcharter/highcharter.pdf
 https://www.datacamp.com/community/tutorials/data-visualization-highcharter-r
 https://www.datacamp.com/tutorial/data-visualization-highcharter-r
+https://www.kaggle.com/code/nulldata/beginners-guide-to-highchart-visual-in-r/report#scatter-plot
 
 #### Manual for plotly
 https://plotly.com/r/

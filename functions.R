@@ -1,3 +1,4 @@
+#' Helper functions for using Benchmarking app
 
 spinner.colour = "#00AA51"
 status = "success"
@@ -30,7 +31,7 @@ descBox <- function(desc, pros, cons, lib, icon, fixik = NULL) {
 
 plotBox <- function(title, output, icon) {
   box(title = title,
-                output %>% withSpinner(type = 1, color = spinner.colour),
+                output %>% withSpinner(type = 8, color = spinner.colour),
                 status = status, 
                 solidHeader = TRUE,
                 collapsible = TRUE, 
