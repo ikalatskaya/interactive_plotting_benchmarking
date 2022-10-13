@@ -2,7 +2,6 @@
 source("global.R")
 source("functions.R")
 
-ggplot_themes = c("theme_grey", "theme_bw", "theme_classic", "theme_dark", "theme_minimal", "theme_void", "theme_version")
 colour = "#00AA51"
 
 getConfig <- function(){
@@ -172,7 +171,10 @@ ui <- function(request) {
               descBox(
                       desc = sysConfig$package$GGPLOTLY$description,
                       pros = sysConfig$package$GGPLOTLY$pros,
-                      fixik = shinyWidgets::pickerInput(inputId = "ggplot_theme", label = h4("Select ggplot_theme"), choices = sysConfig$package$GGPLOTLY$theme , selected="theme_bw"), # ggplot_themes
+                      fixik = shinyWidgets::pickerInput(inputId = "ggplot_theme", 
+                              label = h4("Select ggplot_theme"), 
+                              choices = sysConfig$package$GGPLOTLY$theme , 
+                              selected="theme_bw"), # ggplot_themes
                       con = sysConfig$package$GGPLOTLY$cons,
                       lib = sysConfig$package$GGPLOTLY$lib,
                       icon = icon(sysConfig$title$infoicon)
@@ -210,10 +212,7 @@ ui <- function(request) {
       
                   shinyWidgets::pickerInput(inputId = "highchart_theme", 
                                              label = h4("Select highchart theme"), 
-                                             choices = c("hc_theme_chalk()", "hc_theme_economist()", 
-                                                         "hc_theme_elementary()", "hc_theme_538()", 
-                                                         "hc_theme_flat()", "hc_theme_ffx()", 
-                                                         "hc_theme_google()"), 
+                                             choices = sysConfig$package$HIGHCHARTER$theme, 
                                              selected="hc_theme_google()"),
                   
                   conditionalPanel( condition = "input.type == 'scatter'",
@@ -281,16 +280,10 @@ ui <- function(request) {
                   p(sysConfig$package$ECHART$description),
                   h4("Pros"),
                   p(sysConfig$package$ECHART$pros),
-                  # https://echarts4r.john-coene.com/articles/themes.html
+                 
                   shinyWidgets::pickerInput(inputId = "ehcart_theme", 
                                             label = h4("Select echart theme"), 
-                                            choices = c("auritus", "azul", "bee-inspired", "blue", "caravan", "carp", "chalk",
-                                                        "cool", "dark-blue", "dark-bold", "dark-digerati", "dark-fresh-cut", "dark-mushroom",
-                                                        "dark", "eduardo", "essos", "forest", "fresh-cut", "fruit", "gray", "green",
-                                                        "halloween", "helianthus", "infographic", "inspired", "jazz", "london", "macarons",
-                                                        "macarons2", "mint", "purple-passion", "red-velvet", "red", "roma", "royal",
-                                                        "sakura", "shine", "tech-blue", "vintage", "walden", "wef", "weforum", "westeros",
-                                                        "wonderland"), 
+                                            choices = echart_themes, 
                                             selected="forest"),
                   
                   h4("Cons"),
@@ -311,7 +304,8 @@ ui <- function(request) {
     fluidPage(
       br(),
       br(),
-      column(12, solidHeader = TRUE, status = "success", dataTableOutput('table'), extensions = c('Responsive')),
+      column(12, solidHeader = TRUE, status = "success", 
+             dataTableOutput('table'), extensions = c('Responsive')),
       br()
     )
   )
@@ -413,7 +407,12 @@ server <- function(input, output, session) {
     else if(input$ggplot_theme == "theme_classic") {
       plot = plot + theme_classic()
     }
-    
+    else if(input$ggplot_theme == "theme_linedraw") {
+      plot = plot + theme_linedraw()
+    }
+    else if(input$ggplot_theme == "theme_light") {
+      plot = plot + theme_light()
+    }
     
     plot
     

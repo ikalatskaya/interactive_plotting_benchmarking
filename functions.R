@@ -3,6 +3,17 @@
 spinner.colour = "#00AA51"
 status = "success"
 
+
+## Visualization: ui side
+# generate description box for all packages. This data is saved in sys.yml
+# Arguments:
+#   desc: the description of the package as a string
+#   pros: a list of advantages or cool features
+#   cons: a list of limitations
+#   lib: R library
+#   fixik: additional functions usually from shinyWidgets::pickerInput() for theme selection
+# Return: shinydashboard::box
+# 
 descBox <- function(desc, pros, cons, lib, icon, fixik = NULL) {
   
              box(style='width:3; 
@@ -28,7 +39,14 @@ descBox <- function(desc, pros, cons, lib, icon, fixik = NULL) {
 }
 
 
-
+## Visualization unit: ui side
+# generates box with the plot for all packages. This data is generated in server()
+# Arguments:
+#   title: the name of the package stored in sysConfig$package
+#   output: plot object
+#   icon: used icon from https://chartio.com/learn/charts/stacked-bar-chart-complete-guide/
+# Return: shinydashboard::box
+# 
 plotBox <- function(title, output, icon) {
   box(title = title,
                 output %>% withSpinner(type = 8, color = spinner.colour),
@@ -44,7 +62,14 @@ plotBox <- function(title, output, icon) {
 }
 
 
-
+## Visualization unit: ui side
+# generates box with R code.
+# Arguments:
+#   title: the name of the package stored in sysConfig$package
+#   plot: plot object
+#   icon: used icon from https://chartio.com/learn/charts/stacked-bar-chart-complete-guide/
+# Return: shinydashboard::box
+# 
 codeBox <- function(title, output) {
   box(title = title,
           output, 
@@ -53,3 +78,4 @@ codeBox <- function(title, output) {
           id = "code_box"
       )
 }
+
