@@ -17,14 +17,15 @@ package:
     pros: (1) Free, (2) Easy to use; (3) Professional look
     cons: (1) Tooltips have to be handled manually with JavaScript
     lib: library(plotly)
+    theme: []
   GGPLOTLY:
     name: Ggplot2 R package
     icon: user-group
     description: Extension of the ggplo2 package.
     pros: (1) Free; (2) Works with ggplot objects; (3) Tooltips for x, y, and colour are automatically added; (4) Interactive legends; (5) Many different themes are available
-    cons: (1) This package doesnt always generate a nice professional look; (2) Plot subsetting using legends doesn't lead to the rescaling of x- and y-axes.
+    cons: (1) This package doesnt always generate a clear professional look; (2) Plot subsetting using legends doesn't lead to the rescaling of x- and y-axe; (3) Pie chart is not supported.
     lib: library(ggplot2)
-    theme: ["theme_grey", "theme_bw", "theme_classic", "theme_dark", "theme_minimal", "theme_void", "theme_version"]
+    theme: [theme_grey, theme_bw, theme_classic, theme_linedraw, theme_light, theme_dark, theme_minimal, theme_void, theme_version]
   BOKEH:
     name: rbokeh R package
     icon: user-group
@@ -33,6 +34,7 @@ package:
     pros: (1) Free; (2) Easy to add tooltips; (3) Easy to plot; (4) Overall nice professional look.
     cons: (1) The legend covers a part of the plot and not movable (solution was posted only for python lib; (2) Legends are not interactive (which makes the plot almost static). 
     lib: library(rbokeh)
+    theme: []
   HIGHCHARTER:
     name: highcharter R package
     icon: lock
@@ -42,9 +44,10 @@ package:
           arearange, areasplinerange, columnrange, bubble, box plot, error bars, funnel, waterfall and polar chart types. 
           Highcharter R package is a wrapper for the ‘Highcharts’ library including shortcut functions to plot R objects. 
           It was created by Highsoft in Norway (2009).
-    pros: (1) Very professionally looking plots; (2) The legends are filling available space in the most efficient way, (3) Interactive legends; (4) Rich collection of cool themes.
+    pros: (1) Very professionally looking plots; (2) The legends are filling available space in the most efficient way, (3) Interactive legends; (4) Rich collection of cool themes; (5) Provides cool hovering feature.
     cons: (1) Highcharts is a Highsoft product which is not free for commercial and Governmental use; (2) Tooltips could be added using JS.
     lib: library(highcharter)
+    theme: [hc_theme_chalk(), hc_theme_economist(), hc_theme_elementary(), hc_theme_538(), hc_theme_flat(), hc_theme_ffx(), hc_theme_google()]
   ECHART:
     name: echart4r R package
     icon: user-group
@@ -53,5 +56,6 @@ package:
     cons: (1) Relatively hard to build; (2) THe stacked barcharts are tricky.
     lib: library(echarts4r)
     icon2: info-circle
+    theme: []
 
 

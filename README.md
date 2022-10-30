@@ -4,7 +4,7 @@
 
 Visualizations grant users the ability to explore, manipulate, and interact with data by employing dynamic charts, changing colors, and shapes based on queries or interactions. 
 
-What is interactive visuazation?
+What is interactive visualization?
 
 Interactive visualizations are produced using data visualization tools which allow for direct modification of elements on a graphical plot.
 
@@ -18,10 +18,9 @@ Interactivity: long lasting RShiny apps should be interactive and self-explicit.
 
 ## Product
 
-We have build an Rshiny dashboard that shows and compares five different R packages that help to build interactive plots for Rshiny dashboards and Rmarkdowns.
+I have built an Rshiny dashboard that shows and compares five different R packages that help to build interactive plots for Rshiny dashboards and Rmarkdowns.
 
-It could be found here: https://minijen.shinyapps.io/benchmarking/
-
+It could be seen here: https://minijen.shinyapps.io/benchmarking/
 
 
 <img width="1354" alt="Screen Shot 2022-09-26 at 8 29 18 PM" src="https://user-images.githubusercontent.com/20693710/192404342-eeba23cc-cb94-4ca6-b20e-6787e0f1baad.png">

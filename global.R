@@ -3,6 +3,8 @@
 # https://chartio.com/learn/charts/stacked-bar-chart-complete-guide/
 # The main objective of a standard bar chart is to compare numeric values between levels of a categorical variable. 
 
+# A scatter plot (aka scatter chart, scatter graph) uses dots to represent values for two different numeric variables. 
+
 library(shiny)
 library(shinydashboard)
 library(shinydashboardPlus)
@@ -30,7 +32,8 @@ data(stars)
 # clean pokemon dataset for easier visualization
 pokemon = pokemon %>% na.omit() %>% dplyr::filter(!type_1 %in% c("steel", "psychic", "ghost", "fairy", "normal", "bug", "ice", "electric"))
 
-plots = c("scatter", "boxplot", "barchart", "piechart") # heatmap, density
+plots = c("Scatter plot" = "scatter", "Density distribution"= "density", "Boxplot" = "boxplot", "Barchart" = "barchart", "Piechart" = "piechart") # heatmap, density
+
 num.var = select_if(pokemon, is.numeric) %>% colnames()
 char.var = select_if(pokemon, is.character) %>% colnames()
 remove = c("pokemon", "image_url" , "icon_url" , "detail_url" )
