@@ -368,35 +368,23 @@ server <- function(input, output, session) {
   output$myggplotly <- renderPlotly({
     
     if(input$type == "scatter") {
-      plot = data() %>% ggplot(., aes(xx, yy, color=zz)) + geom_point(size=input$dotsize, alpha=opacity) + labs(x = input$varX, y = input$varY, title="ggplotly: scatter plot example")
+      plot = data() %>% ggplot(., aes(xx, yy, color=zz)) + geom_point(size=input$dotsize, alpha=opacity) + labs(x = input$varX, y = input$varY)
       # plot = plot + geom_smooth()
     }
     else if(input$type == "boxplot") {
-      plot = data() %>% ggplot(., aes(y = xx, x = zz, colour = zz)) + ggplot2::geom_boxplot() + geom_jitter(shape=16, position=position_jitter(0.2), size=input$dotsize) + theme(axis.text.x = element_text(angle=60, hjust=1)) + labs(y = input$varY, x = "", title = "ggplotly: boxplot exaple" )
-      # + coord_flip()
+      plot = data() %>% ggplot(., aes(y = xx, x = zz, colour = zz)) + ggplot2::geom_boxplot() + geom_jitter(shape=16, position=position_jitter(0.2), size=input$dotsize) + theme(axis.text.x = element_text(angle=60, hjust=1)) + labs(y = input$varY, x = "" ) + coord_flip()
     }
     else if(input$type == "barchart") {
-      plot = data() %>% dplyr::count(zz, aa) %>% ggplot(., aes(n, zz, fill=aa)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab(input$varZ) + ggtitle("Barplot with ggplotly") 
-      ggplotly(plot)
+      plot = data() %>% dplyr::count(zz, aa) %>% ggplot(., aes(n, zz, fill=aa)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab(input$varZ)
     }
     else if(input$type == "piechart") {
       text = paste0("\n   Piecharts can't be rendered in ggplotly. \n",
-                   "    Static piechart could be built using ggplot.\n",
-                  " See code below.")
+                   "    Static piechart could be built using ggplot.\n")
       plot = ggplot() + annotate("text", x = 3, y = 25, size=5, label = text, color = colour)
     }
     else if(input$type == "density") {
-      plot = data() %>% ggplot(., aes(xx)) + geom_histogram(aes(y = ..density..), bins = 50, colour = 1, fill = "green") + geom_density() + labs(x = input$varX, title="Density plot with ggplotly") + geom_rug()
+      plot = data() %>% ggplot(., aes(xx)) + geom_histogram(aes(y = ..density..), bins = 50, colour = 1, fill = "green") + geom_density() + labs(x = input$varX) + geom_rug()
     }
-    
-    
-    if(input$isLegend) {
-      plot = plot + theme(legend.position = "none")  
-    }
-    else {
-      plot = plot + theme(legend.title = element_blank()) # not working
-    }
-    
     
     if(input$ggplot_theme == "theme_light") {
       plot = plot + theme_light()
@@ -425,34 +413,52 @@ server <- function(input, output, session) {
     else if(input$ggplot_theme == "theme_light") {
       plot = plot + theme_light()
     }
+    
+    title = paste0(stringr::str_to_title(input$type), " plot example using <i>ggplotly</i>.")
+    
+    if(input$isLegend) { # it has to be AFTER ggplot_theme
+      plot = plot + theme(legend.position = "none")
+    }
+    plot = plot + ggtitle(title) 
+    # + theme(legend.title = element_blank()) - works only in static ggplot
+    
     plot
   })
   
   
+  
   output$ggplotly_code <- renderText({
     if(input$type == "scatter") {
-      string = paste0('pokemon %>% ggplot(., aes(', input$varX, ', ', input$varY, ', color=', input$varZ, ')) + geom_point(size=', input$dotsize, ', alpha=opacity) + labs(x = ', input$varX, ', y = ', input$varY, ', title="ggplotly: scatter plot example")')
+      string = paste0('pokemon %>% ggplot(., aes(', input$varX, ', ', input$varY, ', color=', input$varZ, ')) + geom_point(size=', input$dotsize, ', alpha=', opacity, ') + labs(x = ', add_quotes(input$varX), ', y = ', add_quotes(input$varY), ')')
     }
     else if(input$type == "boxplot") {
-      string = paste0(' pokemon %>% ggplot(., aes(y = ', input$varX, ', x = ', input$varZ, ', colour = ', input$varZ, ')) + ggplot2::geom_boxplot() + geom_jitter(shape=16, position=position_jitter(0.2)) + theme(axis.text.x = element_text(angle=60, hjust=1)) + labs(y =', input$varY, ', x = "", title = "ggplotly: boxplot" )')
+      string = paste0(' pokemon %>% ggplot(., aes(y = ', input$varX, ', x = ', input$varZ, ', colour = ', input$varZ, ')) + geom_boxplot() + geom_jitter(shape=16, position=position_jitter(0.2)) + theme(axis.text.x = element_text(angle=60, hjust=1)) + coord_flip() + labs(y =', add_quotes(input$varY), ', x = "")')
     }
     else if(input$type == "density") {
-      string = paste0('pokemon %>% ggplot(., aes(', input$varX, ')) + geom_histogram(aes(y = ..density..), bins = 30, colour = 1, fill = "green") + geom_density() + geom_rug() + labs(x = input$varX, title="Density plot with ggplotly")')
+      string = paste0('pokemon %>% ggplot(., aes(', input$varX, ')) + geom_histogram(aes(y = ..density..), bins = 30, colour = 1, fill = "green") + geom_density() + geom_rug() + labs(x = ', add_quotes(input$varX), ')')
     }
     else if(input$type == "barchart") {
-      string = paste0('pokemon %>% dplyr::count(', input$varZ, ', ', input$varA, ') %>% ggplot(., aes(n, ', input$varZ, ', fill=', input$varA, ')) + geom_bar(stat="identity") + ggtitle("Barplot with ggplotly") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab(', input$varZ, ') ')
+      string = paste0('pokemon %>% dplyr::count(', input$varZ, ', ', input$varA, ') %>% ggplot(., aes(n, ', input$varZ, ', fill=', input$varA, ')) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab(', add_quotes(input$varZ), ') ')
     }
     else if(input$type == "piechart") {
-      string = paste0('paste0(ggplot(pokemon %>% dplyr::count(', input$varZ, '), aes(x="", y=n, fill=', input$varZ, ')) + geom_bar(width = 1, stat = "identity") + coord_polar("y", start=0)')
-    }
-    
-    
-    if(input$isLegend) {
-      string = paste0(string, 'theme(legend.position = "none")')
+      string = paste0(' pokemon %>% dplyr::count(', input$varZ, '), aes(x="", y = n, fill=', input$varZ, ')) + geom_bar(width = 1, stat = "identity") + coord_polar("y", start=0)')
     }
     
     string = paste0(string, " + ", input$ggplot_theme, "()")
-    paste0("ggplotly(", string, ")")
+    
+    if(input$isLegend) {
+      string = paste0(string, ' + theme(legend.position = "none")')
+    }
+    
+    title = paste0(stringr::str_to_title(input$type), " plot example using <i>ggplotly</i>.")
+    
+    if(input$type != "piechart") {
+      paste0("ggplotly(", string, " + ggtitle(", add_quotes(title), ") )")
+    }
+    else {
+      ""
+    }
+   
   })
   
   
@@ -462,54 +468,63 @@ server <- function(input, output, session) {
   ###################################
   output$plotly <- renderPlotly({
     
+    title = paste0(stringr::str_to_title(input$type), " plot example by <i>Plotly</i>.")
     
     if(input$type == "scatter") {
-      plot = data() %>% plot_ly(colors = RColorBrewer::brewer.pal(8, "Set2")) %>% add_trace(x=~xx, y=~yy, color=~zz, type="scatter", mode="markers", opacity=opacity, marker = list(size = input$dotsize), text = ~paste(" ID", id, "\n", "pokemon", pokemon, "\n", "type: ", type_1,  "\n", "Egg group: ", egg_group_1), hoverinfo=c("text")) %>% layout(title = "<i>Plotly:</i> scatter plot example", xaxis = list(title = input$varX), yaxis = list(title = input$varY ))
+      plot = data() %>% plot_ly(colors = RColorBrewer::brewer.pal(8, "Set2")) %>% add_trace(x=~xx, y=~yy, color=~zz, type="scatter", mode="markers", opacity=opacity, marker = list(size = input$dotsize), text = ~paste(" ID", id, "\n", "pokemon", pokemon, "\n", "type: ", type_1,  "\n", "Egg group: ", egg_group_1), hoverinfo=c("text")) 
+      plot = plot %>% layout( xaxis = list(title = input$varX), yaxis = list(title = input$varY ))
     }
     else if(input$type == "boxplot") {
-      plot = data() %>% plot_ly(colors = "Set3", type = "box", x =~xx, color=~zz, boxpoints="all", jitter=0.5, pointpos = 0, marker = list(size = input$dotsize), text = ~paste(" ID", id, "\n", "pokemon", pokemon, "\n", "type: ", type_1,  "\n", "Egg group: ", egg_group_1), hoverinfo=c("text")) %>% layout(title="<i>Plotly</i>: boxplot example") 
+      plot = data() %>% plot_ly(colors = "Set3", type = "box", x =~xx, color=~zz, boxpoints="all", jitter=0.5, pointpos = 0, marker = list(size = input$dotsize), text = ~paste(" ID", id, "\n", "pokemon", pokemon, "\n", "type: ", type_1,  "\n", "Egg group: ", egg_group_1), hoverinfo=c("text"))
     }
     else if(input$type == "density") {
       fit <- density(data()$xx)
-      plot = plot_ly(data = data(), x = ~xx, type = "histogram", nbinsx = 50, name = "histogram") %>% add_trace(x = fit$x, y = fit$y, type = "scatter", mode = "lines", fill = "tozeroy", yaxis = "y2", name = "density") %>% layout(yaxis2 = list(overlaying = "y", side = "right")) %>% layout(title="<i>Plotly</i>: histogram and density plot example", xaxis = list(title = input$varX))
+      plot = plot_ly(data = data(), x = ~xx, type = "histogram", name = "histogram") %>% add_trace(x = fit$x, y = fit$y, type = "scatter", mode = "lines", fill = "tozeroy", yaxis = "y2", name = "density") %>% layout(yaxis2 = list(overlaying = "y", side = "right")) 
+      plot = plot %>% layout(xaxis = list(title = input$varX))
     }
     else if(input$type == "piechart") {
-      plot = data() %>% dplyr::count(zz) %>% plot_ly(labels = ~zz, values=~n, type="pie", colors = RColorBrewer::brewer.pal(8, "Set2"), textposition = 'outside', textinfo = 'label+percent', hole = 0.2) %>% layout(title = "Plotly: piechart", xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+      plot = data() %>% dplyr::count(zz) %>% plot_ly(labels = ~zz, values=~n, type="pie", colors = RColorBrewer::brewer.pal(8, "Set2"), textposition = 'outside', textinfo = 'label+percent', hole = 0.2)
+      plot = plot %>% layout(xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
     }
     else if(input$type == "barchart") {
-      plot = data()  %>% dplyr::count(zz, aa) %>% plot_ly(colors = RColorBrewer::brewer.pal(8, "Set2")) %>% add_trace(type='bar', x =~n, y=~zz, color=~aa, text = ~paste(zz, '\n', aa, '\n', 'Number ', n), hoverinfo=c('text')) %>% layout(barmode = 'stack', margin=list(l=240)) %>% layout(title = 'Barchart by <i>plot_ly</i>', yaxis = list(title = input$varZ), xaxis = list(title = "total count"))
+      plot = data()  %>% dplyr::count(zz, aa) %>% plot_ly(colors = RColorBrewer::brewer.pal(8, "Set2")) %>% add_trace(type='bar', x =~n, y=~zz, color=~aa, text = ~paste(zz, '\n', aa, '\n', 'Number ', n), hoverinfo=c('text')) %>% layout(barmode = 'stack', margin=list(l = 240)) 
+      plot = plot %>% layout(yaxis = list(title = input$varZ), xaxis = list(title = "total count"))
     }
     
     if(input$isLegend) {
       plot = plot %>% layout(showlegend = FALSE)
     }
-    plot
+    
+    plot = plot %>% layout(title = title)
+    plot 
   })
   
   
   output$plotly_code <- renderText({
+    title = paste0(stringr::str_to_title(input$type), " plot example by <i>Plotly</i>.")
+   
     if(input$type == "scatter") {
-      string = paste0('pokemon %>% plot_ly %>% add_trace(x=~', input$varX, ', y=~', input$varY, ', color=~', input$varZ, ' , type="scatter", mode="markers", opacity=opacity, marker = list(size = ', input$dotsize, '), text = ~paste(" ID", id, "pokemon", pokemon, "type: ", type_1,  "Egg group: ", egg_group_1), hoverinfo=c("text")) %>% layout(title = "Plotly: scatter plot example", xaxis = list(title = ', input$varX, '))')
+      string = paste0('pokemon %>% plot_ly %>% add_trace(x=~', input$varX, ', y=~', input$varY, ', color=~', input$varZ, ' , type="scatter", mode="markers", opacity=', opacity, ', marker = list(size = ', input$dotsize, '), text = ~paste(" ID", id, "pokemon", pokemon, "type: ", type_1,  "Egg group: ", egg_group_1), hoverinfo=c("text")) %>% layout( xaxis = list(title = ', add_quotes(input$varX), '))')
     }
     else if(input$type == "boxplot") {
-      string = paste0('pokemon %>% plot_ly(type = "box", x =~', input$varX, ', color=~', input$varZ, ', boxpoints="all", jitter=0.5, pointpos = 0, marker = list(size = ', input$dotsize, '), text = ~paste(" ID", id, "pokemon", pokemon, "type: ", type_1,  "Egg group: ", egg_group_1), hoverinfo=c("text")) %>% layout(title="Plotly: boxplot example") ')
+      string = paste0('pokemon %>% plot_ly(type = "box", x =~', input$varX, ', color=~', input$varZ, ', boxpoints="all", jitter=0.5, pointpos = 0, marker = list(size = ', input$dotsize, '), text = ~paste(" ID", id, "pokemon", pokemon, "type: ", type_1,  "Egg group: ", egg_group_1), hoverinfo=c("text")) ')
     }
     else if(input$type == "piechart") {
-      string = paste0("pokemon %>% dplyr::count(", input$varZ, ") %>% plot_ly(labels = ~", input$varZ, ", values=~n, type='pie', textposition = 'outside', textinfo = 'label+percent', hole = 0.2) %>% layout(title = 'Plotly: piechart', xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))")
+      string = paste0("pokemon %>% dplyr::count(", input$varZ, ") %>% plot_ly(labels = ~", input$varZ, ", values=~n, type='pie', textposition = 'outside', textinfo = 'label+percent', hole = 0.2) %>% layout(xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))")
     }
     else if(input$type == "barchart") {
-      string = paste0("pokemon %>% dplyr::count(", input$varZ, ", ", input$varA, ") %>% plot_ly() %>% add_trace(type='bar', x =~n, y=~", input$varZ, ", color=~", input$varA, ", text = ~paste(", input$varZ, ", ", input$varA, ", 'Number ', n), hoverinfo=c('text')) %>% layout(barmode = 'stack', margin=list(l=240)) %>% layout(title = 'Barchart by <i>plot_ly</i>', yaxis = list(title = ", input$varZ, "))")
+      string = paste0("pokemon %>% dplyr::count(", input$varZ, ", ", input$varA, ") %>% plot_ly() %>% add_trace(type='bar', x =~n, y=~", input$varZ, ", color=~", input$varA, ", text = ~paste(", input$varZ, ", ", input$varA, ", 'Number ', n), hoverinfo=c('text')) %>% layout(barmode = 'stack', margin=list(l=240)) %>% layout( yaxis = list(title = ", add_quotes(input$varZ), "))")
     }
     else if(input$type == "density") {
       string = paste0(' 
         fit <- density(pokemon[["', input$varX, '"]])
-        plot_ly(data = pokemon, x = ~', input$varX, ', type = "histogram", nbinsx = 50, name = "histogram") %>% add_trace(x = fit$x, y = fit$y, type = "scatter", mode = "lines", fill = "tozeroy", yaxis = "y2", name = "density") %>% layout(yaxis2 = list(overlaying = "y", side = "right")) %>% layout(title="<i>Plotly</i>: histogram and density plot example", xaxis = list(title =', input$varX, ')) ')
+        plot_ly(data = pokemon, x = ~', input$varX, ', type = "histogram", name = "histogram") %>% add_trace(x = fit$x, y = fit$y, type = "scatter", mode = "lines", fill = "tozeroy", yaxis = "y2", name = "density") %>% layout(yaxis2 = list(overlaying = "y", side = "right")) %>% layout(xaxis = list(title =', add_quotes(input$varX), ')) ')
     }
     
     if(input$isLegend) {
       string = paste0(string, "%>% layout(showlegend = FALSE)")
     }
-    string
+    string = paste0(string, " %>% layout(title=", add_quotes(title), ")")
     
   })
   
@@ -518,7 +533,7 @@ server <- function(input, output, session) {
   ## HIGHCHART
   ###################################
   output$highchart <- renderHighchart2({
-    
+    # !!!!!!!!!! ISSUE JS function should be a string
     if(input$type == "scatter") {
       if(input$toBubble) {
           hcplot = highchart(type = "chart") %>% hc_add_series(data(), "bubble", hcaes(x = xx, y = yy, group = zz)) %>% hc_title(text = 'Highcharter: bubble plot', style = list(fontWeight = 'bold')) %>% hc_yAxis(title = list(text = input$varY), allowDecimals = FALSE) %>% hc_tooltip(formatter = JS("function(){ return ('pokemon: ' + this.point.pokemon + ' <br> id: ' + this.point.id + '<br> base: ' + this.point.base_experience)}")) %>% hc_xAxis(title = list(text = input$varX), allowDecimals = FALSE)
@@ -584,7 +599,7 @@ server <- function(input, output, session) {
   output$highcharter_code <- renderText({
     if(input$type == "scatter") {
       tooltips = "function(){ return ('pokemon: ' + this.point.pokemon + ' <br> id: ' + this.point.id + '<br> base: ' + this.point.base_experience)}"
-      string = paste0 ("highchart() %>% hc_add_series(pokemon, 'scatter', hcaes(x = ", input$varX, ", y = ", input$varY,  ", group = ", input$varZ, ")) %>% hc_title(text = 'Highcharter: scatter plot', style = list(fontWeight = 'bold')) %>% hc_yAxis(title = list(text =", input$varY, "), allowDecimals = FALSE) %>% hc_tooltip(formatter = JS(", tooltips, ")) %>% hc_plotOptions(scatter = list( marker = list(fillColor = NULL,  lineWidth = 2, lineColor = NULL, radius = input$dotsize))) ")
+      string = paste0 ("highchart() %>% hc_add_series(pokemon, 'scatter', hcaes(x = ", input$varX, ", y = ", input$varY,  ", group = ", input$varZ, ")) %>% hc_yAxis(title = list(text =", add_quotes(input$varY), "), allowDecimals = FALSE) %>% hc_tooltip(formatter = JS(", tooltips, ")) %>% hc_plotOptions(scatter = list( marker = list(fillColor = NULL,  lineWidth = 2, lineColor = NULL, radius =", input$dotsize, "))) ")
     }
     else if(input$type == "boxplot") {
       string = paste0("plot = data_to_boxplot(pokemon, variable = ", input$varX, "group_var =", input$varZ, ", add_outliers = TRUE)", "\n",
@@ -593,18 +608,18 @@ server <- function(input, output, session) {
      )
     }
     else if(input$type == "barchart") {
-      string = paste0("pokemon %>% dplyr::count(", input$varZ, ", ", input$varA, ") %>% hchart(type = 'bar', hcaes(x = ", input$varZ, ", y = n, group=", input$varA, ")) %>% hc_plotOptions(bar=list(stacking='stack')) %>% hc_title(text = 'Barplot by <i>Highcharter </i> ', margin = 20, align = 'left', style = list(color = '#22A884', useHTML = TRUE)) %>% hc_xAxis(title=list(text=", input$varZ, ")) ") 
+      string = paste0("pokemon %>% dplyr::count(", input$varZ, ", ", input$varA, ") %>% hchart(type = 'bar', hcaes(x = ", input$varZ, ", y = n, group=", input$varA, ")) %>% hc_plotOptions(bar=list(stacking='stack')) %>% hc_xAxis(title=list(text=", add_quotes(input$varZ), ")) ") 
     }
     else if(input$type == "piechart") {
-      string = paste0("pokemon %>% dplyr::count(", input$varZ, ") %>% hchart(type ='pie', hcaes(", input$varZ, ", y = n)) %>% hc_title(text = 'Piechart with highcharter') ")
+      string = paste0("pokemon %>% dplyr::count(", input$varZ, ") %>% hchart(type ='pie', hcaes(", input$varZ, ", y = n))  ")
     }
     else if(input$type == "density") {
-      string = paste0('hchart(pokemon[[', input$varX, ']], yAxis = 0, breaks = 50) %>% hc_add_series(density(pokemon[[', input$varX, ']], na.rm = TRUE), type = "area", opacity=0.7, yAxis = 1) %>% hc_yAxis_multiples(create_axis(naxis = 2, heights = c(2, 1)))')
+      string = paste0('hchart(pokemon[[', add_quotes(input$varX), ']], yAxis = 0, breaks = 50) %>% hc_add_series(density(pokemon[[', add_quotes(input$varX), ']], na.rm = TRUE), type = "area", opacity=0.7, yAxis = 1) %>% hc_yAxis_multiples(create_axis(naxis = 2, heights = c(2, 1)))')
     }
     
-    string = paste0(string,  " %>% ", input$highchart_theme)
-    
-    paste0(string,'hcplot %>% hc_credits(enabled = TRUE, text = "Sources: highchater 2022", style = list(fontSize = "10px"), enabled = TRUE) ')
+    string = paste0(string,  " %>% hc_add_theme(", input$highchart_theme, ")")
+    string = paste0(string, "%>% hc_title(text = ", input$type, " example plot by <i>Highcharter.</i> ', margin = 20, align = 'left', style = list(color = '#22A884', fontWeight = 'bold', useHTML = TRUE))")
+    paste0(string, "  %>% hc_credits(enabled = TRUE, text = 'Sources: Highchater 2022', style = list(fontSize = '10px'), enabled = TRUE) ")
     
   })
   
@@ -660,7 +675,7 @@ server <- function(input, output, session) {
     
     
     if(input$type == "scatter") {
-      string = paste0(string,  ' %>% ly_points(x = ', input$varX, ', y = ', input$varY, ', color = ', input$varZ, ', data = pokemon, hover = list.of.var.to.show, size =',  input$dotsize, ') %>% x_axis(label = ', input$varX, ') %>% x_axis(label = ', input$varY, ')')
+      string = paste0(string,  ' %>% ly_points(x = ', input$varX, ', y = ', input$varY, ', color = ', input$varZ, ', data = pokemon, hover = c(', as.character(stringr::str_c(char.var, collapse = ", ")), '), size =',  input$dotsize, ') %>% x_axis(label = ', add_quotes(input$varX), ') %>% y_axis(label = ', add_quotes(input$varY), ')')
     }
     else if(input$type == "boxplot") {
       string = paste0(string, ' %>% ly_boxplot(xx, ', input$varZ, ', color = zz, data = pokemon, alpha = 0.8) %>% y_axis(label = ', input$varY, ')')
@@ -672,7 +687,7 @@ server <- function(input, output, session) {
       string = paste0("", "\n")
     }
     else if(input$type == "density") {
-      string = paste0(string, ' %>% ly_hist(', input$varX, ', data = pokemon, breaks = 50, freq = FALSE) %>% ly_density(', input$varX, ', data = pokemon) %>% x_axis(label =', input$varX, ') ')
+      string = paste0(string, ' %>% ly_hist(', input$varX, ', data = pokemon, breaks = 50, freq = FALSE) %>% ly_density(', input$varX, ', data = pokemon) %>% x_axis(label =', add_quotes(input$varX), ') ')
     }
     
     string
@@ -726,16 +741,16 @@ server <- function(input, output, session) {
     title = paste0(stringr::str_to_title(input$type), " plot example by Echart.")
     
     if(input$type == "scatter") {
-      string = paste0("pokemon %>% group_by(", input$varZ, ") %>% e_charts(", input$varX, ") %>% e_scatter(", input$varY, "symbol_size = ", input$dotsize, ") %>% e_axis_labels(x = ", input$varX, ", y = ", input$varY, ") %>% e_title(text = 'Echart: scatter plot') ")
+      string = paste0("pokemon %>% group_by(", input$varZ, ") %>% e_charts(", input$varX, ") %>% e_scatter(", input$varY, ", symbol_size = ", input$dotsize, ") %>% e_axis_labels(x = ", add_quotes(input$varX), ", y = ", add_quotes(input$varY), ") ")
     }
     else if(input$type == "boxplot") {
-      string = paste0("pokemon %>% group_by(", input$varZ, ") %>% e_charts() %>% e_boxplot(", input$varX, ", outliers = FALSE) %>% e_title(text = 'Echart: boxplot example') ")
+      string = paste0("pokemon %>% group_by(", input$varZ, ") %>% e_charts() %>% e_boxplot(", input$varX, ", outliers = FALSE)  ")
     }
     else if(input$type == "barchart") {
-      string = paste0("pokemon %>% dplyr::count(", input$varZ, ") %>% e_charts(", input$varZ, ") %>% e_bar(n, stack = 'grp')  %>% e_title(text = 'Echart: barplot example') ")
+      string = paste0("pokemon %>% dplyr::count(", input$varZ, ") %>% e_charts(", input$varZ, ") %>% e_bar(n, stack = 'grp')  ")
     }
     else if(input$type == "piechart") {
-      string = paste0("pokemon %>% dplyr::count(", input$varZ, ") %>% e_charts(", input$varZ, ") %>% e_pie(n, radius = c('10%', '70%')) %>% e_title('Echart: piechart example')")
+      string = paste0("pokemon %>% dplyr::count(", input$varZ, ") %>% e_charts(", input$varZ, ") %>% e_pie(n, radius = c('10%', '70%')) ")
     }
     else if(input$type == "density") {
       string = paste0("pokemon %>% e_chart() %>% e_histogram(serie = ", input$varX, ", y_index = 1, breaks = 50, name = 'histogram') %>% e_density( serie = ", input$varX, ", smooth = FALSE,  name = 'density', opacity = 0.4)") 
@@ -743,14 +758,14 @@ server <- function(input, output, session) {
     
     # take care of the legends
     if(input$isLegend) {
-      string = paste0(string, "%>% e_legend(show = FALSE) %>% e_title(text =", title," )")
+      string = paste0(string, "%>% e_legend(show = FALSE)")
     }
     else{
       string = paste0(string, "%>% e_legend(orient = 'vertical', right = '5', top = '15%', type='scroll')")
     }
     
     # additional common attributes
-    paste0(string, " %>% e_theme(name = '", input$ehcart_theme, "') %>% e_tooltip() %>% e_brush() ")
+    paste0(string, " %>% e_theme(name = '", input$ehcart_theme, "') %>% e_tooltip() %>% e_brush() %>% e_title(text =", add_quotes(title)," )")
 
   })
   

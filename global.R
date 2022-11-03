@@ -22,7 +22,7 @@ library(rbokeh)
 library(plotly)
 library(highcharter)
 library(echarts4r)
-
+library(rbokeh)
 
 
 # the dataset is coming from Highcharter R package
