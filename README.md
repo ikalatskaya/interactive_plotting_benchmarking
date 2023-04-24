@@ -29,9 +29,10 @@ It could be seen here: https://minijen.shinyapps.io/benchmarking/
 ## List of the presented packages:
 
 <b> Plotly </b>
-Plotly provides online graphing, analytics, and statistics tools for individuals and collaboration, as well as scientific graphing libraries for Python, R, MATLAB, Perl, Julia, Arduino, and REST. Plotly is a technical computing company headquartered in Montreal, Quebec. It develops online data analytics and visualization tools. 
+Plotly provides online graphing, analytics, and statistics tools for individuals and collaboration, as well as scientific graphing libraries for Python, R, MATLAB, Perl, Julia, Arduino, and REST. Plotly is a technical computing company headquartered in Montreal, Quebec. It develops online data analytics and visualization tools. Probably the best free package. 
 
 <b> GGPLOTLY </b>
+ggplotly is a plotly R libraray that builds a wrapper around almost any ggplot object and converting them into interactive plot. It is fast and easy to implement, but not always generates the best result.
 
 <b> HIGHCHARTER </b>
 Highcharts is very flexible and customizable javascript charting library and it has a great and powerful API. Highcharts offers both a commercial license as well as a free non-commercial license. 
