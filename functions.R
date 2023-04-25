@@ -4,6 +4,10 @@ spinner.colour = "#00AA51"
 status = "success"
 
 
+add_quotes <- function(variable) {
+  return(paste0("'", variable, "'"))
+}
+
 ## Visualization: ui side
 # generate description box for all packages. This data is saved in sys.yml
 # Arguments:

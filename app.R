@@ -74,8 +74,8 @@ ui <- function(request) {
       ),
       br(),                  
       shinyWidgets::prettyCheckbox(inputId = "isLegend", label = "Remove legend?"),
-      br(),
-      bookmarkButton()
+      br()
+      # bookmarkButton()
       #     conditionalPanel( condition = "input.type == 'boxplot'",
       #                      shinyWidgets::prettyCheckbox(inputId = "nestedBoxplot", label = "Generate nested boxplot?")),
       
@@ -556,8 +556,9 @@ server <- function(input, output, session) {
       hcplot = hchart(data()[[input$varX]], yAxis = 0, breaks = 50) %>% hc_add_series(density(pokemon[[input$varX]], na.rm = TRUE), type = "area", opacity=0.7, yAxis = 1) %>% hc_yAxis_multiples(create_axis(naxis = 2, heights = c(2, 1)))
     }
     
+    title = paste0('Using Highcharter for ', input$type, ' plot')
     
-    hcplot = hcplot %>% hc_title(text = paste0('Using Highcharter for ', input$type, ' plot'), style = list(fontWeight = 'bold'))
+    hcplot = hcplot %>% hc_title(text = title, style = list(fontWeight = 'bold'))
     
     if(input$isLegend) {
       hcplot =  hcplot %>% hc_legend(enabled = F)
@@ -597,14 +598,21 @@ server <- function(input, output, session) {
   
   
   output$highcharter_code <- renderText({
+    
+    title = paste0("Using Highcharter for ", input$type, " plot.")
+    title = stringr::str_c(title)
+    
     if(input$type == "scatter") {
-      tooltips = "function(){ return ('pokemon: ' + this.point.pokemon + ' <br> id: ' + this.point.id + '<br> base: ' + this.point.base_experience)}"
-      string = paste0 ("highchart() %>% hc_add_series(pokemon, 'scatter', hcaes(x = ", input$varX, ", y = ", input$varY,  ", group = ", input$varZ, ")) %>% hc_yAxis(title = list(text =", add_quotes(input$varY), "), allowDecimals = FALSE) %>% hc_tooltip(formatter = JS(", tooltips, ")) %>% hc_plotOptions(scatter = list( marker = list(fillColor = NULL,  lineWidth = 2, lineColor = NULL, radius =", input$dotsize, "))) ")
-    }
+      string = paste0 ( 
+        " tooltips = function(){ return ('pokemon: ' + this.point.pokemon + ' <br> id: ' + this.point.id + '<br> base: ' + this.point.base_experience)}", 
+        "\n", 
+        "highchart() %>% hc_add_series(pokemon, 'scatter', hcaes(x = ", input$varX, ", y = ", input$varY,  ", group = ", input$varZ, ")) %>% hc_yAxis(title = list(text =", add_quotes(input$varY), "), allowDecimals = FALSE) 
+        %>% hc_tooltip(formatter = JS( tooltips )) %>% hc_plotOptions(scatter = list( marker = list(fillColor = NULL,  lineWidth = 2, lineColor = NULL, radius =", input$dotsize, ")))")
+    } # not ok, check for zz, xx
     else if(input$type == "boxplot") {
-      string = paste0("plot = data_to_boxplot(pokemon, variable = ", input$varX, "group_var =", input$varZ, ", add_outliers = TRUE)", "\n",
-      "highchart() %>% hc_xAxis(type = 'category') %>% hc_add_series_list(plot) %>% hc_add_series(data = pokemon, type = 'scatter', hcaes(x = zz, y = xx, group = zz)) 
-      %>% hc_plotOptions(scatter=list(jitter=list(x = 0.08, y = 0))) %>% hc_title(text = 'Highchater: boxplots') %>% hc_plotOptions(scatter=list(jitter=list(x=0.08, y=0), marker=list(radius = input$dotsize)))"
+      string = paste0(" plot = data_to_boxplot(pokemon, variable = ", input$varX, ", group_var =", input$varZ, ", add_outliers = TRUE)", "\n",
+      "highchart() %>% hc_xAxis(type = 'category') %>% hc_add_series_list(plot) %>% hc_add_series(data = pokemon, type = 'scatter', hcaes(x = ", input$varZ, ", y = ", input$varX, ", group = ", input$varZ, ")) %>% hc_plotOptions(scatter=list(jitter=list(x = 0.08, y = 0))) %>% hc_plotOptions(scatter=list(jitter=list(x=0.08, y=0), marker=list(radius =", input$dotsize, ")))
+      "
      )
     }
     else if(input$type == "barchart") {
@@ -612,13 +620,15 @@ server <- function(input, output, session) {
     }
     else if(input$type == "piechart") {
       string = paste0("pokemon %>% dplyr::count(", input$varZ, ") %>% hchart(type ='pie', hcaes(", input$varZ, ", y = n))  ")
-    }
+    } # OK
     else if(input$type == "density") {
       string = paste0('hchart(pokemon[[', add_quotes(input$varX), ']], yAxis = 0, breaks = 50) %>% hc_add_series(density(pokemon[[', add_quotes(input$varX), ']], na.rm = TRUE), type = "area", opacity=0.7, yAxis = 1) %>% hc_yAxis_multiples(create_axis(naxis = 2, heights = c(2, 1)))')
     }
     
     string = paste0(string,  " %>% hc_add_theme(", input$highchart_theme, ")")
-    string = paste0(string, "%>% hc_title(text = ", input$type, " example plot by <i>Highcharter.</i> ', margin = 20, align = 'left', style = list(color = '#22A884', fontWeight = 'bold', useHTML = TRUE))")
+    
+    string = paste0(string, " %>% hc_title(text = '", title, "' , margin = 20, align = 'left', style = list(color = '#22A884', fontWeight = 'bold', useHTML = TRUE))")
+    
     paste0(string, "  %>% hc_credits(enabled = TRUE, text = 'Sources: Highchater 2022', style = list(fontSize = '10px'), enabled = TRUE) ")
     
   })
@@ -678,10 +688,10 @@ server <- function(input, output, session) {
       string = paste0(string,  ' %>% ly_points(x = ', input$varX, ', y = ', input$varY, ', color = ', input$varZ, ', data = pokemon, hover = c(', as.character(stringr::str_c(char.var, collapse = ", ")), '), size =',  input$dotsize, ') %>% x_axis(label = ', add_quotes(input$varX), ') %>% y_axis(label = ', add_quotes(input$varY), ')')
     }
     else if(input$type == "boxplot") {
-      string = paste0(string, ' %>% ly_boxplot(xx, ', input$varZ, ', color = zz, data = pokemon, alpha = 0.8) %>% y_axis(label = ', input$varY, ')')
+      string = paste0(string, ' %>% ly_boxplot(', input$varX, ', ', input$varZ, ', color = ', input$varZ, ', data = pokemon, alpha = 0.8) %>% y_axis(label = ', add_quotes(input$varY), ')')
     }
     else if(input$type == "barchart") {
-      string = paste0(string, " %>% ly_bar(", input$varZ, ", n, data = pokemon %>% dplyr::count(", input$varZ, ", sort=T), hover = TRUE) %>% theme_axis('x', major_label_orientation = 90) %>% x_axis(label = input$varZ)")
+      string = paste0(string, " %>% ly_bar(", input$varZ, ", n, data = pokemon %>% dplyr::count(", input$varZ, ", sort=T), hover = TRUE) %>% theme_axis('x', major_label_orientation = 90) %>% x_axis(label = ", add_quotes(input$varZ), ")")
     }
     else if(input$type == "piechart") {
       string = paste0("", "\n")
